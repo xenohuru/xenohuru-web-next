@@ -1,65 +1,334 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '@/lib/api';
+import { AttractionCard } from '@/components/AttractionCard';
+import { Compass, ArrowRight, ChevronsDown, Building2, Plane, Mountain, MapPin } from 'lucide-react';
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+import '@splidejs/react-splide/css';
+
+// Swahili quotes that rotate
+const SWAHILI_QUOTES = [
+  { sw: "Hakuna Matata", en: "No worries" },
+  { sw: "Safari njema", en: "Have a good journey" },
+  { sw: "Karibu Tanzania", en: "Welcome to Tanzania" },
+  { sw: "Pole pole", en: "Slowly, slowly" },
+  { sw: "Jambo", en: "Hello" },
+  { sw: "Asante sana", en: "Thank you very much" },
+  { sw: "Twende", en: "Let's go" },
+  { sw: "Pamoja", en: "Together" },
+];
+
+// Animated Counter Component
+function AnimatedCounter({ target, duration = 2000 }: { target: number; duration?: number }) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const increment = target / (duration / 16);
+    let current = 0;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(current));
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [target, duration]);
+
+  return <span>{count.toLocaleString()}</span>;
+}
+
+// Rotating Swahili Quote Component
+function RotatingSwahiliQuote() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % SWAHILI_QUOTES.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const quote = SWAHILI_QUOTES[index];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <p className="text-2xl sm:text-3xl font-display text-[#8b5e3c] transition-opacity duration-500">
+      "{quote.sw}" — {quote.en}
+    </p>
+  );
+}
+
+export default function HomePage() {
+  const [quoteIndex, setQuoteIndex] = useState(0);
+
+  const { data: featured } = useQuery({
+    queryKey: ['featured-attractions'],
+    queryFn: () => api.attractions.featured(),
+  });
+
+  const { data: stats } = useQuery({
+    queryKey: ['stats'],
+    queryFn: () => api.stats.get(),
+  });
+
+  // Rotate hero quote
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setQuoteIndex((prev) => (prev + 1) % SWAHILI_QUOTES.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const heroQuote = SWAHILI_QUOTES[quoteIndex];
+
+  return (
+    <div className="min-h-screen">
+      {/* HERO SECTION */}
+      <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+        {/* Animated gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1a4731] via-gray-900 to-black" />
+        <div 
+          className="absolute inset-0 opacity-40"
+          style={{
+            background: 'linear-gradient(135deg, rgba(26,71,49,0.88) 0%, rgba(30,111,168,0.55) 50%, rgba(200,144,58,0.4) 100%)',
+            backgroundSize: '200% 200%',
+            animation: 'gradient-shift 12s ease infinite',
+          }}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+        
+        {/* Grain texture overlay */}
+        <div 
+          className="absolute inset-0 opacity-[0.035] pointer-events-none"
+          style={{
+            backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E\")",
+            backgroundSize: '128px',
+          }}
+        />
+
+        {/* Content */}
+        <div className="relative z-10 text-center text-white px-4 max-w-4xl mx-auto">
+          {/* Rotating Swahili Quote */}
+          <p className="text-[#c8903a] text-base sm:text-lg mb-2 opacity-90 transition-opacity duration-500">
+            "{heroQuote.sw}"
+          </p>
+          
+          {/* Eyebrow */}
+          <p className="font-mono text-white/60 uppercase tracking-widest text-xs mb-6">
+            Discover Tanzania
+          </p>
+          
+          {/* Main Title */}
+          <h1 className="font-display text-5xl sm:text-6xl lg:text-8xl font-black leading-[1.05] mb-6">
+            Explore the Wild<br className="hidden sm:block" /> Heart of Africa
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
+          
+          {/* Subtitle */}
+          <p className="text-lg sm:text-xl text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed">
+            From the snows of Kilimanjaro to the turquoise shores of Zanzibar — safari, hiking, cultural tours and more.
+          </p>
+          
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              href="/attractions"
+              className="inline-flex items-center justify-center gap-2 bg-[#c8903a] text-white font-semibold px-8 py-4 rounded-full hover:bg-[#c8903a]/90 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
+              <Compass className="w-5 h-5" />
+              Browse Attractions
+            </a>
             <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              href="/regions"
+              className="inline-flex items-center justify-center gap-2 border-2 border-white/80 text-white font-semibold px-8 py-4 rounded-full hover:bg-white/10 transition-all"
             >
-              Learning
-            </a>{" "}
-            center.
+              Explore Regions
+              <ArrowRight className="w-5 h-5" />
+            </a>
+          </div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <a 
+          href="#stats"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/60 hover:text-white transition-colors animate-bounce"
+          aria-label="Scroll down"
+        >
+          <ChevronsDown className="w-7 h-7" />
+        </a>
+      </section>
+
+      {/* STATS BAR */}
+      <section id="stats" className="bg-[#1a4731] text-white relative overflow-hidden">
+        <div 
+          className="absolute inset-0 opacity-10"
+          style={{
+            backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,0.05) 10px, rgba(255,255,255,0.05) 20px)',
+          }}
+        />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+              <div className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-2">Attractions</div>
+              <div className="text-4xl sm:text-5xl font-display font-bold">
+                {stats ? <AnimatedCounter target={stats.attractionCount} /> : '0'}
+                <span className="text-white/40 text-xs">+</span>
+              </div>
+            </div>
+            <div>
+              <div className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-2">Regions</div>
+              <div className="text-4xl sm:text-5xl font-display font-bold">
+                {stats ? <AnimatedCounter target={stats.regionCount} /> : '0'}
+              </div>
+            </div>
+            <div>
+              <div className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-2">Kilimanjaro Peak</div>
+              <div className="text-4xl sm:text-5xl font-display font-bold">
+                <AnimatedCounter target={5895} />
+                <span className="text-white/40 text-xs">m</span>
+              </div>
+            </div>
+            <div>
+              <div className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-2">Year-Round</div>
+              <div className="text-4xl sm:text-5xl font-display font-bold">Open</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SWAHILI QUOTE BANNER */}
+      <section className="bg-[#f5e6c8]/60 py-6">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <RotatingSwahiliQuote />
+        </div>
+      </section>
+
+      {/* FEATURED ATTRACTIONS */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" data-aos="fade-up">
+        <div className="text-center mb-14" data-aos="fade-down">
+          <p className="font-mono text-xs tracking-widest text-[#c8903a] uppercase mb-3">
+            Handpicked Highlights
+          </p>
+          <h2 className="font-display text-4xl sm:text-5xl font-bold text-white mb-3">
+            Featured Attractions
+          </h2>
+          <p className="text-[#6b7280] text-lg max-w-xl mx-auto">
+            Discover Tanzania's most iconic destinations
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        {featured && featured.length > 0 ? (
+          <Splide
+            options={{
+              type: 'loop',
+              perPage: 3,
+              perMove: 1,
+              gap: '1.5rem',
+              pagination: true,
+              autoplay: true,
+              pauseOnHover: true,
+              interval: 4000,
+              breakpoints: {
+                1024: { perPage: 2 },
+                640: { perPage: 1 },
+              },
+            }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
+            {featured.map((attraction, index) => (
+              <SplideSlide key={attraction.id}>
+                <div data-aos="fade-up" data-aos-delay={index * 100}>
+                  <AttractionCard attraction={attraction} />
+                </div>
+              </SplideSlide>
+            ))}
+          </Splide>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-96 bg-[#111827] rounded-2xl animate-pulse" />
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* DISTANCE REFERENCE */}
+      <section className="py-20 bg-[#111827]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <p className="font-mono text-xs tracking-widest text-[#c8903a] uppercase mb-3">
+              Plan Your Route
+            </p>
+            <h2 className="font-display text-4xl sm:text-5xl font-bold text-white mb-3">
+              Distance from Key Locations
+            </h2>
+            <p className="text-[#6b7280] text-lg">
+              Know how far each destination is from popular hubs
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-[#0a0a0a] rounded-2xl p-6 border border-[#c8903a]/10 text-center">
+              <div className="w-14 h-14 rounded-2xl bg-[#1e6fa8]/10 flex items-center justify-center mx-auto mb-4">
+                <Building2 className="w-7 h-7 text-[#1e6fa8]" />
+              </div>
+              <h3 className="font-display text-lg font-bold text-white mb-1">Dar es Salaam</h3>
+              <p className="text-[#6b7280] text-sm">Commercial Capital</p>
+            </div>
+
+            <div className="bg-[#0a0a0a] rounded-2xl p-6 border border-[#c8903a]/10 text-center">
+              <div className="w-14 h-14 rounded-2xl bg-[#c8903a]/10 flex items-center justify-center mx-auto mb-4">
+                <Plane className="w-7 h-7 text-[#c8903a]" />
+              </div>
+              <h3 className="font-display text-lg font-bold text-white mb-1">Kilimanjaro Airport</h3>
+              <p className="text-[#6b7280] text-sm">International Gateway</p>
+            </div>
+
+            <div className="bg-[#0a0a0a] rounded-2xl p-6 border border-[#c8903a]/10 text-center">
+              <div className="w-14 h-14 rounded-2xl bg-[#1a4731]/30 flex items-center justify-center mx-auto mb-4">
+                <Mountain className="w-7 h-7 text-[#1a4731]" />
+              </div>
+              <h3 className="font-display text-lg font-bold text-white mb-1">Arusha</h3>
+              <p className="text-[#6b7280] text-sm">Safari Capital</p>
+            </div>
+
+            <div className="bg-[#0a0a0a] rounded-2xl p-6 border border-[#c8903a]/10 text-center">
+              <div className="w-14 h-14 rounded-2xl bg-[#1e6fa8]/10 flex items-center justify-center mx-auto mb-4">
+                <MapPin className="w-7 h-7 text-[#1e6fa8]" />
+              </div>
+              <h3 className="font-display text-lg font-bold text-white mb-1">Zanzibar</h3>
+              <p className="text-[#6b7280] text-sm">Island Paradise</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA SECTION */}
+      <section className="py-20 bg-gradient-to-br from-[#1a4731] to-[#0a0a0a]">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-display text-4xl font-bold text-white mb-6">
+            Ready to Start Your Adventure?
+          </h2>
+          <p className="text-xl text-[#fafaf8]/80 mb-8">
+            Join us in exploring Tanzania's incredible attractions, from majestic mountains to pristine beaches.
+          </p>
           <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/attractions"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 text-lg font-semibold text-white bg-[#c8903a] rounded-full hover:bg-[#c8903a]/90 transition-all shadow-lg hover:shadow-xl"
           >
-            Documentation
+            <Compass className="w-5 h-5" />
+            Start Exploring
           </a>
         </div>
-      </main>
+      </section>
+
+      <style jsx>{`
+        @keyframes gradient-shift {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+      `}</style>
     </div>
   );
 }
