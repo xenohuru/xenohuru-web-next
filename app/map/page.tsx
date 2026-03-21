@@ -30,6 +30,15 @@ const MarkerClusterGroup = dynamic(
 
 import 'leaflet/dist/leaflet.css';
 
+// Tanzania bounds (including Zanzibar)
+const TANZANIA_BOUNDS: [[number, number], [number, number]] = [
+  [-11.75, 29.34], // Southwest
+  [-0.99, 40.50]   // Northeast
+];
+
+// Tanzania center
+const TANZANIA_CENTER: [number, number] = [-6.3690, 34.8888];
+
 // Fix Leaflet icon
 if (typeof window !== 'undefined') {
   const L = require('leaflet');
@@ -58,6 +67,7 @@ export default function MapPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const [isLocating, setIsLocating] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const { data: attractions, isLoading } = useQuery({
     queryKey: ['attractions-map'],
@@ -73,7 +83,16 @@ export default function MapPage() {
     setIsLocating(true);
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setUserLocation([position.coords.latitude, position.coords.longitude]);
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        
+        // Check if location is within Tanzania bounds
+        if (lat >= TANZANIA_BOUNDS[0][0] && lat <= TANZANIA_BOUNDS[1][0] &&
+            lng >= TANZANIA_BOUNDS[0][1] && lng <= TANZANIA_BOUNDS[1][1]) {
+          setUserLocation([lat, lng]);
+        } else {
+          alert('Your location is outside Tanzania. Showing all attractions.');
+        }
         setIsLocating(false);
       },
       (error) => {
@@ -85,8 +104,8 @@ export default function MapPage() {
   };
 
   const filteredAttractions = selectedCategory
-    ? attractions?.results?.filter((a) => a.category === selectedCategory)
-    : attractions?.results;
+    ? attractions?.filter((a) => a.category === selectedCategory)
+    : attractions;
 
   if (isLoading) {
     return (
@@ -98,8 +117,18 @@ export default function MapPage() {
 
   return (
     <div className="relative h-screen w-full">
+      {/* Mobile Toggle Button */}
+      <button
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        className="lg:hidden absolute top-24 left-4 z-[1001] bg-[#161b22] border border-[#30363d] rounded-lg p-3 shadow-xl"
+      >
+        {sidebarOpen ? <X className="w-5 h-5 text-white" /> : <Navigation className="w-5 h-5 text-white" />}
+      </button>
+
       {/* Sidebar */}
-      <div className="absolute top-20 left-4 z-[1000] w-64 bg-[#161b22] border border-[#30363d] rounded-lg shadow-xl">
+      <div className={`absolute top-20 left-4 z-[1000] w-72 bg-[#161b22] border border-[#30363d] rounded-lg shadow-xl transition-transform duration-300 ${
+        sidebarOpen ? 'translate-x-0' : '-translate-x-[calc(100%+1rem)] lg:translate-x-0'
+      }`}>
         {/* Header */}
         <div className="p-4 border-b border-[#30363d]">
           <h2 className="font-display text-lg font-bold text-white">
@@ -111,7 +140,7 @@ export default function MapPage() {
         </div>
 
         {/* Categories */}
-        <div className="p-4 max-h-96 overflow-y-auto">
+        <div className="p-4 max-h-[50vh] overflow-y-auto">
           <button
             onClick={() => setSelectedCategory(null)}
             className={`w-full text-left px-3 py-2 rounded-lg mb-2 transition-colors ${
@@ -124,7 +153,8 @@ export default function MapPage() {
           </button>
 
           {CATEGORIES.map((category) => {
-            const count = attractions?.results?.filter((a) => a.category === category).length || 0;
+            const count = attractions?.filter((a) => a.category === category).length || 0;
+            if (count === 0) return null;
             return (
               <button
                 key={category}
@@ -135,7 +165,7 @@ export default function MapPage() {
                     : 'text-[#8b949e] hover:bg-[#0d1117]'
                 }`}
               >
-                <span>{category}</span>
+                <span className="text-sm">{category}</span>
                 <span className="text-xs opacity-60">{count}</span>
               </button>
             );
@@ -162,28 +192,17 @@ export default function MapPage() {
             )}
           </button>
         </div>
-
-        {/* Selected Category Badge */}
-        {selectedCategory && (
-          <div className="p-4 pt-0">
-            <div className="flex items-center justify-between bg-[#0d1117] px-3 py-2 rounded-lg">
-              <span className="text-white text-sm">{selectedCategory}</span>
-              <button
-                onClick={() => setSelectedCategory(null)}
-                className="text-[#8b949e] hover:text-white"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Map */}
       {typeof window !== 'undefined' && (
         <MapContainer
-          center={userLocation || [-6.3690, 34.8888]} // Tanzania center
+          center={userLocation || TANZANIA_CENTER}
           zoom={userLocation ? 10 : 6}
+          maxBounds={TANZANIA_BOUNDS}
+          maxBoundsViscosity={1.0}
+          minZoom={6}
+          maxZoom={18}
           className="h-full w-full"
           style={{ zIndex: 0 }}
         >
@@ -198,7 +217,7 @@ export default function MapPage() {
                 key={attraction.id}
                 position={[attraction.latitude, attraction.longitude]}
               >
-                <Popup>
+                <Popup maxWidth={250}>
                   <div className="min-w-[200px]">
                     {attraction.featured_image && (
                       <img
@@ -242,12 +261,12 @@ export default function MapPage() {
       {/* Legend */}
       <div className="absolute bottom-4 right-4 z-[1000] bg-[#161b22] border border-[#30363d] rounded-lg p-4 shadow-xl">
         <div className="text-white text-sm font-semibold mb-2">Legend</div>
-        <div className="flex items-center gap-2 text-[#8b949e] text-xs">
+        <div className="flex items-center gap-2 text-[#8b949e] text-xs mb-1">
           <div className="w-3 h-3 bg-[#1a7a4a] rounded-full"></div>
           <span>Attraction</span>
         </div>
         {userLocation && (
-          <div className="flex items-center gap-2 text-[#8b949e] text-xs mt-2">
+          <div className="flex items-center gap-2 text-[#8b949e] text-xs">
             <div className="w-3 h-3 bg-[#e8a045] rounded-full"></div>
             <span>Your Location</span>
           </div>

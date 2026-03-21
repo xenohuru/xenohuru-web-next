@@ -104,7 +104,7 @@ export function ReviewForm({ attractionSlug, onSuccess }: ReviewFormProps) {
           <StarRating
             rating={formData.rating}
             onRatingChange={(rating) => setFormData({ ...formData, rating })}
-            interactive
+            readonly={false}
             size="lg"
           />
         </div>

@@ -24,7 +24,7 @@ import type {
   BlogFilters,
 } from './types';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://159.65.119.182:8000';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://xenohuru.cleven.is-a.dev';
 
 // Generic fetch wrapper with error handling
 async function fetchAPI<T>(
@@ -305,6 +305,26 @@ export const feedbackAPI = {
 };
 
 // ============================================
+// WEATHER
+// ============================================
+
+export const weatherAPI = {
+  /**
+   * Get current weather for coordinates
+   */
+  current: async (lat: number, lng: number): Promise<any> => {
+    return fetchAPI<any>(`/api/v1/weather/current/?lat=${lat}&lng=${lng}`);
+  },
+
+  /**
+   * Get weather forecast for coordinates
+   */
+  forecast: async (lat: number, lng: number): Promise<any> => {
+    return fetchAPI<any>(`/api/v1/weather/forecast/?lat=${lat}&lng=${lng}`);
+  },
+};
+
+// ============================================
 // STATS
 // ============================================
 
@@ -337,6 +357,7 @@ export const api = {
   operators: operatorsAPI,
   partners: partnersAPI,
   contributors: contributorsAPI,
+  weather: weatherAPI,
   feedback: feedbackAPI,
   stats: statsAPI,
 };

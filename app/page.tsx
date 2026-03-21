@@ -161,7 +161,7 @@ export default function HomePage() {
       </section>
 
       {/* STATS BAR */}
-      <section id="stats" className="bg-[#1a4731] text-white relative overflow-hidden">
+      <section id="stats" className="bg-[#1a4731] text-white relative overflow-hidden" data-aos="fade-up">
         <div 
           className="absolute inset-0 opacity-10"
           style={{
@@ -170,27 +170,27 @@ export default function HomePage() {
         />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
+            <div data-aos="zoom-in" data-aos-delay="100">
               <div className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-2">Attractions</div>
               <div className="text-4xl sm:text-5xl font-display font-bold">
                 {stats ? <AnimatedCounter target={stats.attractionCount} /> : '0'}
                 <span className="text-white/40 text-xs">+</span>
               </div>
             </div>
-            <div>
+            <div data-aos="zoom-in" data-aos-delay="200">
               <div className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-2">Regions</div>
               <div className="text-4xl sm:text-5xl font-display font-bold">
                 {stats ? <AnimatedCounter target={stats.regionCount} /> : '0'}
               </div>
             </div>
-            <div>
+            <div data-aos="zoom-in" data-aos-delay="300">
               <div className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-2">Kilimanjaro Peak</div>
               <div className="text-4xl sm:text-5xl font-display font-bold">
                 <AnimatedCounter target={5895} />
                 <span className="text-white/40 text-xs">m</span>
               </div>
             </div>
-            <div>
+            <div data-aos="zoom-in" data-aos-delay="400">
               <div className="text-white/50 text-xs font-semibold uppercase tracking-widest mb-2">Year-Round</div>
               <div className="text-4xl sm:text-5xl font-display font-bold">Open</div>
             </div>
@@ -254,9 +254,9 @@ export default function HomePage() {
       </section>
 
       {/* DISTANCE REFERENCE */}
-      <section className="py-20 bg-[#111827]">
+      <section className="py-20 bg-[#111827]" data-aos="fade-up">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
+          <div className="text-center mb-14" data-aos="fade-down">
             <p className="font-mono text-xs tracking-widest text-[#c8903a] uppercase mb-3">
               Plan Your Route
             </p>
@@ -269,7 +269,7 @@ export default function HomePage() {
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-[#0a0a0a] rounded-2xl p-6 border border-[#c8903a]/10 text-center">
+            <div className="bg-[#0a0a0a] rounded-2xl p-6 border border-[#c8903a]/10 text-center hover:scale-105 hover:shadow-2xl transition-all duration-300" data-aos="flip-left" data-aos-delay="100">
               <div className="w-14 h-14 rounded-2xl bg-[#1e6fa8]/10 flex items-center justify-center mx-auto mb-4">
                 <Building2 className="w-7 h-7 text-[#1e6fa8]" />
               </div>
@@ -277,7 +277,7 @@ export default function HomePage() {
               <p className="text-[#6b7280] text-sm">Commercial Capital</p>
             </div>
 
-            <div className="bg-[#0a0a0a] rounded-2xl p-6 border border-[#c8903a]/10 text-center">
+            <div className="bg-[#0a0a0a] rounded-2xl p-6 border border-[#c8903a]/10 text-center hover:scale-105 hover:shadow-2xl transition-all duration-300" data-aos="flip-left" data-aos-delay="200">
               <div className="w-14 h-14 rounded-2xl bg-[#c8903a]/10 flex items-center justify-center mx-auto mb-4">
                 <Plane className="w-7 h-7 text-[#c8903a]" />
               </div>
@@ -285,7 +285,7 @@ export default function HomePage() {
               <p className="text-[#6b7280] text-sm">International Gateway</p>
             </div>
 
-            <div className="bg-[#0a0a0a] rounded-2xl p-6 border border-[#c8903a]/10 text-center">
+            <div className="bg-[#0a0a0a] rounded-2xl p-6 border border-[#c8903a]/10 text-center hover:scale-105 hover:shadow-2xl transition-all duration-300" data-aos="flip-left" data-aos-delay="300">
               <div className="w-14 h-14 rounded-2xl bg-[#1a4731]/30 flex items-center justify-center mx-auto mb-4">
                 <Mountain className="w-7 h-7 text-[#1a4731]" />
               </div>
@@ -293,7 +293,7 @@ export default function HomePage() {
               <p className="text-[#6b7280] text-sm">Safari Capital</p>
             </div>
 
-            <div className="bg-[#0a0a0a] rounded-2xl p-6 border border-[#c8903a]/10 text-center">
+            <div className="bg-[#0a0a0a] rounded-2xl p-6 border border-[#c8903a]/10 text-center hover:scale-105 hover:shadow-2xl transition-all duration-300" data-aos="flip-left" data-aos-delay="400">
               <div className="w-14 h-14 rounded-2xl bg-[#1e6fa8]/10 flex items-center justify-center mx-auto mb-4">
                 <MapPin className="w-7 h-7 text-[#1e6fa8]" />
               </div>

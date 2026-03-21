@@ -1,4 +1,4 @@
-export function LoadingSkeleton({ variant = 'card' }: { variant?: 'card' | 'list' | 'detail' }) {
+export function LoadingSkeleton({ variant = 'card' }: { variant?: 'card' | 'list' | 'detail' | 'page' }) {
   if (variant === 'card') {
     return (
       <div className="bg-[#111827] rounded-lg overflow-hidden border border-[#c8903a]/10 animate-pulse">
