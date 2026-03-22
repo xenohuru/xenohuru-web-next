@@ -26,12 +26,19 @@ import type {
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://xenohuru.cleven.is-a.dev';
 
+console.log('🔗 API Configuration:', {
+  base: API_BASE,
+  env: process.env.NEXT_PUBLIC_API_URL,
+});
+
 // Generic fetch wrapper with error handling
 async function fetchAPI<T>(
   endpoint: string,
   options?: RequestInit
 ): Promise<T> {
   const url = `${API_BASE}${endpoint}`;
+  
+  console.log('📡 API Request:', url);
   
   try {
     const response = await fetch(url, {
@@ -43,14 +50,19 @@ async function fetchAPI<T>(
       next: { revalidate: options?.cache === 'no-store' ? 0 : 300 }, // 5 min cache default
     });
 
+    console.log('✅ Response:', response.status, response.statusText);
+
     if (!response.ok) {
       const error = await response.json().catch(() => ({ detail: 'Request failed' }));
+      console.error('❌ API Error:', error);
       throw new Error(error.detail || `HTTP ${response.status}`);
     }
 
-    return response.json();
+    const data = await response.json();
+    console.log('✅ Data received for:', endpoint);
+    return data;
   } catch (error) {
-    console.error(`API Error (${endpoint}):`, error);
+    console.error(`🔥 API Error (${endpoint}):`, error);
     throw error;
   }
 }

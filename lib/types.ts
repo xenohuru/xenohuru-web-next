@@ -8,7 +8,7 @@ export interface Attraction {
   name: string;
   category: string;
   category_display?: string;
-  region: number;
+  region: Region | number;  // Can be Region object (detail) or number (list)
   region_name?: string;
   region_slug?: string;
   short_description: string;
@@ -20,7 +20,7 @@ export interface Attraction {
   is_free: boolean;
   latitude: number;
   longitude: number;
-  featured_image: string;
+  featured_image: string | null;
   images?: AttractionImage[];
   tags: string[];
   rating?: number;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery } from '@tantml:query/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import { useParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
@@ -177,7 +177,7 @@ export default function AttractionDetailPage() {
                   {attraction.category}
                 </span>
                 <span className="px-3 py-1 bg-[#161b22] text-[#8b949e] text-sm rounded-full border border-[#30363d]">
-                  {attraction.region}
+                  {typeof attraction.region === 'object' ? attraction.region.name : attraction.region}
                 </span>
                 {attraction.difficultyLevel && (
                   <span className={`px-3 py-1 text-sm font-medium rounded-full border ${DIFFICULTY_COLORS[attraction.difficultyLevel as keyof typeof DIFFICULTY_COLORS]}`}>
@@ -192,7 +192,7 @@ export default function AttractionDetailPage() {
 
               <div className="flex items-center gap-2 text-[#8b949e] mb-6">
                 <MapPin className="w-5 h-5" />
-                <span>{attraction.region}, Tanzania</span>
+                <span>{typeof attraction.region === 'object' ? attraction.region.name : attraction.region}, Tanzania</span>
               </div>
 
               {attraction.rating && (

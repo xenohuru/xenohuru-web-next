@@ -9,6 +9,9 @@ interface AttractionCardProps {
   compact?: boolean;
 }
 
+// Placeholder SVG for missing images
+const PLACEHOLDER_IMAGE = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiMxYTQ3MzE7c3RvcC1vcGFjaXR5OjEiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNlOGEwNDU7c3RvcC1vcGFjaXR5OjAuOCIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSJ1cmwoI2cpIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMCIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlIENvbWluZyBTb29uPC90ZXh0Pjwvc3ZnPg==';
+
 export function AttractionCard({ attraction, compact = false }: AttractionCardProps) {
   const difficultyColors = {
     easy: 'bg-green-500',
@@ -17,13 +20,16 @@ export function AttractionCard({ attraction, compact = false }: AttractionCardPr
     difficult: 'bg-red-500',
   };
 
+  // Use placeholder if image is null or empty
+  const imageSrc = attraction.featured_image || PLACEHOLDER_IMAGE;
+
   if (compact) {
     return (
       <Link href={`/attractions/${attraction.slug}`}>
         <div className="flex gap-3 p-3 bg-[#0d1117] rounded-lg border border-[#30363d] hover:border-[#1a7a4a] transition-colors">
           <div className="relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden">
             <Image
-              src={attraction.featured_image}
+              src={imageSrc}
               alt={attraction.name}
               fill
               className="object-cover"
@@ -35,7 +41,7 @@ export function AttractionCard({ attraction, compact = false }: AttractionCardPr
               {attraction.name}
             </h4>
             <p className="text-[#8b949e] text-xs mb-1 truncate">
-              {attraction.region}
+              {typeof attraction.region === 'object' ? attraction.region.name : attraction.region_name || attraction.region}
             </p>
             {attraction.rating && (
               <StarRating rating={attraction.rating} size="sm" />
@@ -52,7 +58,7 @@ export function AttractionCard({ attraction, compact = false }: AttractionCardPr
         {/* Image */}
         <div className="relative h-48 overflow-hidden">
           <Image
-            src={attraction.featured_image}
+            src={imageSrc}
             alt={attraction.name}
             fill
             className="object-cover group-hover:scale-110 transition-transform duration-300"
