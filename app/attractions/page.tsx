@@ -6,7 +6,7 @@ import { api } from '@/lib/api';
 import { AttractionCard } from '@/components/AttractionCard';
 import { SearchBar } from '@/components/SearchBar';
 import { CardsSkeleton } from '@/components/LoadingSkeleton';
-import { Filter, SlidersHorizontal, AlertCircle, RefreshCw } from 'lucide-react';
+import { Filter, SlidersHorizontal, AlertCircle, RefreshCw, Mountain, Compass } from 'lucide-react';
 import type { AttractionFilters } from '@/lib/types';
 
 export default function AttractionsPage() {
@@ -56,15 +56,33 @@ export default function AttractionsPage() {
 
   return (
     <div className="min-h-screen pt-20">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-[#1a4731] to-[#0a0a0a] py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="font-display text-4xl md:text-5xl font-bold text-white mb-4">
-            Explore <span className="text-[#c8903a]">Attractions</span>
-          </h1>
-          <p className="text-lg text-[#fafaf8]/80 max-w-2xl">
-            Discover Tanzania's incredible destinations — from world-famous national parks to hidden cultural gems.
-          </p>
+      {/* Hero Section with Message */}
+      <div className="relative bg-gradient-to-br from-[#1a4731] via-[#0a0a0a] to-black py-12 overflow-hidden">
+        {/* Background Gradient Animation */}
+        <div className="absolute inset-0 opacity-30" style={{
+          background: 'linear-gradient(135deg, rgba(26,71,49,0.6) 0%, rgba(200,144,58,0.3) 100%)',
+          animation: 'gradient-shift 12s ease infinite',
+        }} />
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <Mountain className="w-8 h-8 text-[#c8903a]" />
+              <span className="text-[#c8903a] font-mono uppercase tracking-widest text-xs">Tanzania's Wonders</span>
+            </div>
+            
+            <h1 className="font-display text-4xl md:text-5xl font-bold text-white mb-4">
+              Explore <span className="text-[#c8903a]">Attractions</span>
+            </h1>
+            
+            <p className="text-lg text-[#fafaf8]/80 max-w-2xl mx-auto mb-2">
+              Discover Tanzania's incredible destinations — from world-famous national parks to hidden cultural gems.
+            </p>
+            
+            <p className="text-sm text-[#8b949e] max-w-2xl mx-auto">
+              Search through {attractions?.length || '18'} verified attractions with real-time weather, reviews, and travel information.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -147,7 +165,8 @@ export default function AttractionsPage() {
         {/* Results Count */}
         {attractions && !isLoading && (
           <div className="mb-6">
-            <p className="text-[#6b7280]">
+            <p className="text-[#6b7280] flex items-center gap-2">
+              <Compass className="w-4 h-4 text-[#c8903a]" />
               {attractions.length} {attractions.length === 1 ? 'attraction' : 'attractions'} found
             </p>
           </div>

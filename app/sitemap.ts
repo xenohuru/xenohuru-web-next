@@ -35,10 +35,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   });
 
-  // Add dynamic attraction pages
+  // Add dynamic attraction pages (gracefully handle API errors)
   try {
-    const attractions = await api.attractions.list();
-    attractions.forEach((attraction) => {
+    const attractionsResult = await api.attractions.list();
+    const attractionsArray = Array.isArray(attractionsResult) ? attractionsResult : [];
+    attractionsArray.forEach((attraction) => {
       entries.push({
         url: `${SITE_URL}/attractions/${attraction.slug}`,
         lastModified: new Date(attraction.updated_at || new Date()),
@@ -47,13 +48,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       });
     });
   } catch (error) {
-    console.error('Error fetching attractions for sitemap:', error);
+    console.error('Skipping attractions for sitemap');
   }
 
-  // Add dynamic region pages
+  // Add dynamic region pages (gracefully handle API errors)
   try {
-    const regions = await api.regions.list();
-    regions.forEach((region) => {
+    const regionsResult = await api.regions.list();
+    const regionsArray = Array.isArray(regionsResult) ? regionsResult : [];
+    regionsArray.forEach((region) => {
       entries.push({
         url: `${SITE_URL}/regions/${region.slug}`,
         lastModified: new Date(region.created_at || new Date()),
@@ -62,13 +64,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       });
     });
   } catch (error) {
-    console.error('Error fetching regions for sitemap:', error);
+    console.error('Skipping regions for sitemap');
   }
 
-  // Add dynamic blog pages
+  // Add dynamic blog pages (gracefully handle API errors)
   try {
-    const articles = await api.blog.list();
-    articles.forEach((article) => {
+    const articlesResult = await api.blog.list();
+    const articlesArray = Array.isArray(articlesResult) ? articlesResult : [];
+    articlesArray.forEach((article) => {
       entries.push({
         url: `${SITE_URL}/blog/${article.slug}`,
         lastModified: new Date(article.updated_at || article.published_at),
@@ -77,7 +80,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       });
     });
   } catch (error) {
-    console.error('Error fetching articles for sitemap:', error);
+    console.error('Skipping articles for sitemap');
   }
 
   return entries;
