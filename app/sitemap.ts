@@ -38,8 +38,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Add dynamic attraction pages (gracefully handle API errors)
   try {
     const attractionsResult = await api.attractions.list();
-    const attractionsArray = Array.isArray(attractionsResult) ? attractionsResult : (attractionsResult as any)?.results || [];
-    attractionsArray.forEach((attraction) => {
+    const attractionsArray: any[] = Array.isArray(attractionsResult) ? attractionsResult : (attractionsResult as any)?.results || [];
+    attractionsArray.forEach((attraction: any) => {
       entries.push({
         url: `${SITE_URL}/attractions/${attraction.slug}`,
         lastModified: new Date(attraction.updated_at || new Date()),
@@ -54,8 +54,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Add dynamic region pages (gracefully handle API errors)
   try {
     const regionsResult = await api.regions.list();
-    const regionsArray = Array.isArray(regionsResult) ? regionsResult : (regionsResult as any)?.results || [];
-    regionsArray.forEach((region) => {
+    const regionsArray: any[] = Array.isArray(regionsResult) ? regionsResult : (regionsResult as any)?.results || [];
+    regionsArray.forEach((region: any) => {
       entries.push({
         url: `${SITE_URL}/regions/${region.slug}`,
         lastModified: new Date(region.created_at || new Date()),
@@ -70,8 +70,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Add dynamic blog pages (gracefully handle API errors)
   try {
     const articlesResult = await api.blog.list();
-    const articlesArray = Array.isArray(articlesResult) ? articlesResult : (articlesResult as any)?.results || [];
-    articlesArray.forEach((article) => {
+    const articlesArray: any[] = Array.isArray(articlesResult) ? articlesResult : (articlesResult as any)?.results || [];
+    articlesArray.forEach((article: any) => {
       entries.push({
         url: `${SITE_URL}/blog/${article.slug}`,
         lastModified: new Date(article.updated_at || article.published_at),

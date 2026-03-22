@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import { AttractionCard } from '@/components/AttractionCard';
 import { WeatherForecastCard } from '@/components/cards/WeatherForecastCard';
-import { Compass, ArrowRight, ChevronsDown, Building2, Plane, Mountain, MapPin, Cloud } from 'lucide-react';
+import { Compass, ArrowRight, ChevronsDown, Building2, Plane, Mountain, MapPin, Cloud, Heart, Mail } from 'lucide-react';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css';
 
@@ -81,8 +81,26 @@ export default function HomePage() {
     queryFn: () => api.partners.list(),
   });
 
+  const { data: regionsData } = useQuery({
+    queryKey: ['regions-preview'],
+    queryFn: () => api.regions.list(),
+  });
+
+  const { data: blogData } = useQuery({
+    queryKey: ['blog-preview'],
+    queryFn: () => api.blog.list(),
+  });
+
+  const { data: operatorsData } = useQuery({
+    queryKey: ['operators-preview'],
+    queryFn: () => api.operators.list(),
+  });
+
   const featured: any[] = Array.isArray(featuredData) ? featuredData : (featuredData as any)?.results || [];
   const partners: any[] = Array.isArray(partnersData) ? partnersData : (partnersData as any)?.results || [];
+  const regions: any[] = Array.isArray(regionsData) ? regionsData : (regionsData as any)?.results || [];
+  const blogArticles: any[] = Array.isArray(blogData) ? blogData : (blogData as any)?.results || [];
+  const operators: any[] = Array.isArray(operatorsData) ? operatorsData : (operatorsData as any)?.results || [];
 
   // Dar es Salaam coordinates for weather forecast
   const { data: weatherForecast } = useQuery({
@@ -268,6 +286,183 @@ export default function HomePage() {
         )}
       </section>
 
+      {/* REGIONS PREVIEW */}
+      {regions && regions.length > 0 && (
+        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" data-aos="fade-up">
+          <div className="text-center mb-14">
+            <p className="font-mono text-xs tracking-widest text-[#c8903a] uppercase mb-3">
+              Discover Destinations
+            </p>
+            <h2 className="font-display text-4xl sm:text-5xl font-bold text-white mb-3">
+              Explore Regions
+            </h2>
+            <p className="text-[#8b949e] text-lg max-w-2xl mx-auto">
+              From coastal paradises to mountain peaks, discover Tanzania's diverse regions
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {regions.slice(0, 3).map((region: any, idx: number) => (
+              <a
+                key={region.id}
+                href={`/regions/${region.slug}`}
+                className="group relative h-80 rounded-xl overflow-hidden"
+                data-aos="fade-up"
+                data-aos-delay={idx * 100}
+              >
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10" />
+                {region.featured_image && (
+                  <img
+                    src={region.featured_image}
+                    alt={region.name}
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                )}
+                <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
+                  <h3 className="font-display text-2xl font-bold text-white mb-2">
+                    {region.name}
+                  </h3>
+                  <p className="text-white/80 text-sm line-clamp-2 mb-3">
+                    {region.description}
+                  </p>
+                  <span className="inline-flex items-center gap-2 text-[#1a7a4a] text-sm font-medium">
+                    Explore Region
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <a
+              href="/regions"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#1a7a4a]/20 border border-[#1a7a4a]/30 text-[#1a7a4a] rounded-lg hover:bg-[#1a7a4a]/30 transition-colors font-medium"
+            >
+              View All Regions
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+        </section>
+      )}
+
+      {/* BLOG PREVIEW */}
+      {blogArticles && blogArticles.length > 0 && (
+        <section className="py-20 bg-[#161b22]/50" data-aos="fade-up">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-14">
+              <p className="font-mono text-xs tracking-widest text-[#c8903a] uppercase mb-3">
+                Stories & Insights
+              </p>
+              <h2 className="font-display text-4xl sm:text-5xl font-bold text-white mb-3">
+                Latest from Our Blog
+              </h2>
+              <p className="text-[#8b949e] text-lg max-w-2xl mx-auto">
+                Travel tips, cultural insights, and adventure stories from Tanzania
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {blogArticles.slice(0, 3).map((article: any, idx: number) => (
+                <a
+                  key={article.id}
+                  href={`/blog/${article.slug}`}
+                  className="group bg-[#0d1117] border border-[#30363d] rounded-lg overflow-hidden hover:border-[#1a7a4a]/50 transition-all"
+                  data-aos="fade-up"
+                  data-aos-delay={idx * 100}
+                >
+                  {article.featured_image && (
+                    <div className="h-48 overflow-hidden">
+                      <img
+                        src={article.featured_image}
+                        alt={article.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    </div>
+                  )}
+                  <div className="p-6">
+                    <h3 className="font-semibold text-white mb-2 group-hover:text-[#1a7a4a] transition-colors line-clamp-2">
+                      {article.title}
+                    </h3>
+                    <p className="text-[#8b949e] text-sm line-clamp-3 mb-4">
+                      {article.excerpt || article.content?.substring(0, 150)}
+                    </p>
+                    <div className="flex items-center justify-between text-xs text-[#8b949e]">
+                      <span>{new Date(article.published_at || article.created_at).toLocaleDateString()}</span>
+                      <span className="text-[#1a7a4a]">Read more →</span>
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+
+            <div className="text-center mt-12">
+              <a
+                href="/blog"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[#1a7a4a]/20 border border-[#1a7a4a]/30 text-[#1a7a4a] rounded-lg hover:bg-[#1a7a4a]/30 transition-colors font-medium"
+              >
+                View All Articles
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* TOUR OPERATORS PREVIEW */}
+      {operators && operators.length > 0 && (
+        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" data-aos="fade-up">
+          <div className="text-center mb-14">
+            <p className="font-mono text-xs tracking-widest text-[#c8903a] uppercase mb-3">
+              Trusted Partners
+            </p>
+            <h2 className="font-display text-4xl sm:text-5xl font-bold text-white mb-3">
+              Tour Operators
+            </h2>
+            <p className="text-[#8b949e] text-lg max-w-2xl mx-auto">
+              Licensed and verified tour operators to guide your adventure
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {operators.slice(0, 4).map((operator: any, idx: number) => (
+              <div
+                key={operator.id}
+                className="bg-[#161b22] border border-[#30363d] rounded-lg p-6 hover:border-[#1a7a4a]/50 transition-all"
+                data-aos="fade-up"
+                data-aos-delay={idx * 100}
+              >
+                {operator.logo && (
+                  <div className="h-16 flex items-center justify-center mb-4 bg-white/5 rounded-lg">
+                    <img
+                      src={operator.logo}
+                      alt={operator.name}
+                      className="h-12 object-contain"
+                    />
+                  </div>
+                )}
+                <h3 className="font-semibold text-white text-sm mb-2 line-clamp-1">
+                  {operator.name}
+                </h3>
+                <p className="text-xs text-[#8b949e] line-clamp-2">
+                  {operator.description}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <a
+              href="/operators"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#1a7a4a]/20 border border-[#1a7a4a]/30 text-[#1a7a4a] rounded-lg hover:bg-[#1a7a4a]/30 transition-colors font-medium"
+            >
+              View All Operators
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+        </section>
+      )}
+
       {/* DISTANCE REFERENCE */}
       <section className="py-20 bg-[#111827]" data-aos="fade-up">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -414,6 +609,114 @@ export default function HomePage() {
           </div>
         </section>
       )}
+
+      {/* FAQ SECTION */}
+      <section className="py-20 bg-[#161b22]/50" data-aos="fade-up">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <p className="font-mono text-xs tracking-widest text-[#c8903a] uppercase mb-3">
+              Have Questions?
+            </p>
+            <h2 className="font-display text-4xl sm:text-5xl font-bold text-white mb-3">
+              Frequently Asked Questions
+            </h2>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              {
+                q: "Do I need a visa to visit Tanzania?",
+                a: "Most visitors need a visa. You can obtain it online before travel or on arrival. Check with your local Tanzanian embassy for specific requirements."
+              },
+              {
+                q: "What's the best time to visit Tanzania?",
+                a: "June to October for wildlife viewing during the dry season. December to March for the Great Migration calving season. Zanzibar is great year-round."
+              },
+              {
+                q: "Is Tanzania safe for tourists?",
+                a: "Yes! Tanzania is one of the safest countries in East Africa. Always follow local advice, use licensed operators, and take standard travel precautions."
+              },
+              {
+                q: "What currency is used in Tanzania?",
+                a: "Tanzanian Shilling (TZS). US Dollars are widely accepted. Credit cards work in cities, but carry cash for rural areas."
+              },
+            ].map((faq, idx) => (
+              <details
+                key={idx}
+                className="group bg-[#0d1117] border border-[#30363d] rounded-lg p-6 hover:border-[#1a7a4a]/50 transition-all"
+                data-aos="fade-up"
+                data-aos-delay={idx * 100}
+              >
+                <summary className="font-semibold text-white cursor-pointer flex items-center justify-between">
+                  {faq.q}
+                  <span className="text-[#1a7a4a] group-open:rotate-180 transition-transform">▼</span>
+                </summary>
+                <p className="mt-4 text-[#8b949e] text-sm leading-relaxed">
+                  {faq.a}
+                </p>
+              </details>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <a
+              href="/about"
+              className="inline-flex items-center gap-2 text-[#1a7a4a] hover:text-[#e8a045] transition-colors"
+            >
+              More about Xenohuru
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* SPONSOR CTA */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto" data-aos="fade-up">
+        <div className="bg-gradient-to-br from-[#1a4731] to-[#0d1117] rounded-2xl p-12 border border-[#1a7a4a]/20">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="font-display text-4xl font-bold text-white mb-6">
+              Support Open Tourism Data
+            </h2>
+            <p className="text-lg text-white/80 mb-8">
+              Help us keep Xenohuru free and open. We need support for API hosting, database storage, domain, and infrastructure. Every contribution helps local developers maintain this platform.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="/sponsor"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#e8a045] text-white font-semibold rounded-lg hover:bg-[#e8a045]/90 transition-all shadow-lg"
+              >
+                <Heart className="w-5 h-5" />
+                Become a Sponsor
+              </a>
+              <a
+                href="/contributors"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-white/20 text-white font-semibold rounded-lg hover:bg-white/10 transition-all"
+              >
+                View Contributors
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CONTACT CTA */}
+      <section className="py-20 bg-[#161b22]/50" data-aos="fade-up">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-display text-4xl font-bold text-white mb-6">
+            Need Help Planning Your Trip?
+          </h2>
+          <p className="text-lg text-[#8b949e] mb-8">
+            Our team is here to help. Get in touch for travel advice, tour bookings, or partnership inquiries.
+          </p>
+          <a
+            href="/contact"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#1a7a4a] text-white font-semibold rounded-lg hover:bg-[#1a7a4a]/90 transition-all shadow-lg"
+          >
+            <Mail className="w-5 h-5" />
+            Contact Us
+          </a>
+        </div>
+      </section>
 
       {/* CTA SECTION */}
       <section className="py-20 bg-gradient-to-br from-[#1a4731] to-[#0a0a0a]">

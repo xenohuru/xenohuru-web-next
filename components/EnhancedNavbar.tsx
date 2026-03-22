@@ -74,15 +74,11 @@ export function EnhancedNavbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative">
-              <Mountain className="w-8 h-8 text-[#1a7a4a]" />
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="text-xl font-bold text-white">Xenohuru</span>
-              <span className="px-2 py-0.5 bg-[#1a7a4a]/10 text-[#1a7a4a] text-xs font-semibold rounded border border-[#1a7a4a]/20">
-                Open Source
-              </span>
-            </div>
+            <img 
+              src="/xenohuru-logo.svg" 
+              alt="Xenohuru" 
+              className="h-10 w-auto"
+            />
           </Link>
 
           {/* Desktop Nav Links */}

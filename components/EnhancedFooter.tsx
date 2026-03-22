@@ -56,8 +56,11 @@ export function EnhancedFooter() {
           {/* Column 1 - Brand */}
           <div>
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <Mountain className="w-6 h-6 text-[#1a7a4a]" />
-              <span className="text-lg font-bold text-white">Xenohuru</span>
+              <img 
+                src="/xenohuru-logo.svg" 
+                alt="Xenohuru" 
+                className="h-8 w-auto"
+              />
             </Link>
             <p className="text-[#8b949e] text-sm mb-4 italic">
               Your open-source guide to the wonders of Tanzania
