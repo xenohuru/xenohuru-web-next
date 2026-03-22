@@ -66,7 +66,7 @@ function RotatingSwahiliQuote() {
 export default function HomePage() {
   const [quoteIndex, setQuoteIndex] = useState(0);
 
-  const { data: featured } = useQuery({
+  const { data: featuredData } = useQuery({
     queryKey: ['featured-attractions'],
     queryFn: () => api.attractions.featured(),
   });
@@ -76,10 +76,13 @@ export default function HomePage() {
     queryFn: () => api.stats.get(),
   });
 
-  const { data: partners } = useQuery({
+  const { data: partnersData } = useQuery({
     queryKey: ['partners'],
     queryFn: () => api.partners.list(),
   });
+
+  const featured: any[] = Array.isArray(featuredData) ? featuredData : (featuredData as any)?.results || [];
+  const partners: any[] = Array.isArray(partnersData) ? partnersData : (partnersData as any)?.results || [];
 
   // Dar es Salaam coordinates for weather forecast
   const { data: weatherForecast } = useQuery({

@@ -8,10 +8,12 @@ import { useState } from 'react';
 export default function OperatorsPage() {
   const [sortBy, setSortBy] = useState<'rating' | 'name'>('rating');
   
-  const { data: operators = [], isLoading } = useQuery({
+  const { data: operatorsData = [], isLoading } = useQuery({
     queryKey: ['operators'],
     queryFn: () => api.operators.list(),
   });
+
+  const operators: any[] = Array.isArray(operatorsData) ? operatorsData : (operatorsData as any)?.results || [];
 
   if (isLoading) {
     return (
@@ -146,7 +148,7 @@ export default function OperatorsPage() {
                     <div className="mb-4">
                       <p className="text-[#8b949e] text-xs font-medium mb-2">Specialties:</p>
                       <div className="flex flex-wrap gap-2">
-                        {operator.specialties.slice(0, 3).map((specialty, idx) => (
+                        {operator.specialties.slice(0, 3).map((specialty: string, idx: number) => (
                           <span
                             key={idx}
                             className="px-2 py-1 bg-[#1a7a4a]/10 text-[#1a7a4a] text-xs rounded border border-[#1a7a4a]/20"

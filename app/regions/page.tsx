@@ -13,7 +13,7 @@ export default function RegionsPage() {
   });
 
   // Handle both paginated response and array response
-  const regions = Array.isArray(regionsData)
+  const regions: any[] = Array.isArray(regionsData)
     ? regionsData
     : (regionsData as any)?.results || [];
 

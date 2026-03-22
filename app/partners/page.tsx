@@ -24,10 +24,12 @@ const PARTNER_TYPE_COLORS = {
 export default function PartnersPage() {
   const [selectedType, setSelectedType] = useState<string | null>(null);
   
-  const { data: partners = [], isLoading } = useQuery({
+  const { data: partnersData = [], isLoading } = useQuery({
     queryKey: ['partners'],
     queryFn: () => api.partners.list(),
   });
+
+  const partners: any[] = Array.isArray(partnersData) ? partnersData : (partnersData as any)?.results || [];
 
   if (isLoading) {
     return (

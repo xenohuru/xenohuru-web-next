@@ -24,10 +24,12 @@ export default function ExplorePage() {
   const [selectedType, setSelectedType] = useState<'all' | 'image' | 'video'>('all');
   const [selectedAttraction, setSelectedAttraction] = useState<string | null>(null);
 
-  const { data: attractions = [] } = useQuery({
+  const { data: attractionsData = [] } = useQuery({
     queryKey: ['attractions'],
     queryFn: () => api.attractions.list(),
   });
+
+  const attractions: any[] = Array.isArray(attractionsData) ? attractionsData : (attractionsData as any)?.results || [];
 
   // Extract media from attractions
   const allMedia: MediaItem[] = useMemo(() => {
@@ -51,7 +53,7 @@ export default function ExplorePage() {
 
       // Add additional images
       if (attraction.images && Array.isArray(attraction.images)) {
-        attraction.images.forEach((img, idx) => {
+        attraction.images.forEach((img: any, idx: number) => {
           if (typeof img === 'string') {
             media.push({
               id: `${attraction.id}-img-${idx}`,

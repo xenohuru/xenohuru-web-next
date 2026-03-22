@@ -19,7 +19,7 @@ export default function AttractionsPage() {
   });
 
   // Handle both paginated response and array response
-  const attractions = Array.isArray(attractionsData)
+  const attractions: any[] = Array.isArray(attractionsData)
     ? attractionsData
     : (attractionsData as any)?.results || [];
 

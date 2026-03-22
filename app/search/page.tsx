@@ -18,20 +18,24 @@ export default function SearchPage() {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState<'relevance' | 'rating' | 'name'>('relevance');
 
-  const { data: attractions = [] } = useQuery({
+  const { data: attractionsData = [] } = useQuery({
     queryKey: ['attractions-search'],
     queryFn: () => api.attractions.list(),
   });
 
-  const { data: regions = [] } = useQuery({
+  const { data: regionsData = [] } = useQuery({
     queryKey: ['regions-search'],
     queryFn: () => api.regions.list(),
   });
 
-  const { data: articles = [] } = useQuery({
+  const { data: articlesData = [] } = useQuery({
     queryKey: ['articles-search'],
     queryFn: () => api.blog.list(),
   });
+
+  const attractions: any[] = Array.isArray(attractionsData) ? attractionsData : (attractionsData as any)?.results || [];
+  const regions: any[] = Array.isArray(regionsData) ? regionsData : (regionsData as any)?.results || [];
+  const articles: any[] = Array.isArray(articlesData) ? articlesData : (articlesData as any)?.results || [];
 
   // Filter attractions
   const filteredAttractions = useMemo(() => {

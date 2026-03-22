@@ -69,10 +69,12 @@ export default function MapPage() {
   const [isLocating, setIsLocating] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  const { data: attractions, isLoading } = useQuery({
+  const { data: attractionsData, isLoading } = useQuery({
     queryKey: ['attractions-map'],
     queryFn: () => api.attractions.list(),
   });
+
+  const attractions: any[] = Array.isArray(attractionsData) ? attractionsData : (attractionsData as any)?.results || [];
 
   const handleNearMe = () => {
     if (!navigator.geolocation) {

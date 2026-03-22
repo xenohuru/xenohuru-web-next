@@ -12,10 +12,12 @@ import type { BlogFilters } from '@/lib/types';
 export default function BlogPage() {
   const [filters, setFilters] = useState<BlogFilters>({});
 
-  const { data: articles, isLoading, error } = useQuery({
+  const { data: articlesData, isLoading, error } = useQuery({
     queryKey: ['blog', filters],
     queryFn: () => api.blog.list(filters),
   });
+
+  const articles: any[] = Array.isArray(articlesData) ? articlesData : (articlesData as any)?.results || [];
 
   const handleSearch = useCallback((search: string) => {
     setFilters(prev => ({ ...prev, search: search || undefined }));
