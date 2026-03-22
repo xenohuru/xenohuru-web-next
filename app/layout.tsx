@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
+import { EnhancedNavbar } from "@/components/EnhancedNavbar";
+import { EnhancedFooter } from "@/components/EnhancedFooter";
 import { BackToTop } from "@/components/BackToTop";
 import { Preloader } from "@/components/Preloader";
 import { Toaster } from "react-hot-toast";
@@ -51,9 +51,9 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-[#0a0a0a] text-[#fafaf8]">
         <Providers>
           <Preloader />
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
+          <EnhancedNavbar />
+          <main className="flex-1 pt-16">{children}</main>
+          <EnhancedFooter />
           <BackToTop />
           <Toaster 
             position="top-right"

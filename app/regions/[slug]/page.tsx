@@ -113,7 +113,7 @@ export default function RegionDetailPage() {
               </div>
               <p className="font-semibold text-white">
                 {region.latitude && region.longitude
-                  ? `${region.latitude.toFixed(3)}°, ${region.longitude.toFixed(3)}°`
+                  ? `${Number(region.latitude).toFixed(3)}°, ${Number(region.longitude).toFixed(3)}°`
                   : 'Coordinates unavailable'}
               </p>
               <p className="text-[#8b949e] text-xs mt-2">Geographic center</p>
