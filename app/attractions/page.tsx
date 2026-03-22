@@ -13,10 +13,15 @@ export default function AttractionsPage() {
   const [filters, setFilters] = useState<AttractionFilters>({});
   const [showFilters, setShowFilters] = useState(false);
 
-  const { data: attractions, isLoading, error } = useQuery({
+  const { data: attractionsData, isLoading, error } = useQuery({
     queryKey: ['attractions', filters],
     queryFn: () => api.attractions.list(filters),
   });
+
+  // Handle both paginated response and array response
+  const attractions = Array.isArray(attractionsData)
+    ? attractionsData
+    : (attractionsData as any)?.results || [];
 
   const handleSearch = useCallback((search: string) => {
     setFilters(prev => ({ ...prev, search: search || undefined }));

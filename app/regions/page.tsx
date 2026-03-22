@@ -7,10 +7,15 @@ import { CardsSkeleton } from '@/components/LoadingSkeleton';
 import { MapPin, Compass, AlertCircle, RefreshCw } from 'lucide-react';
 
 export default function RegionsPage() {
-  const { data: regions, isLoading, error } = useQuery({
+  const { data: regionsData, isLoading, error } = useQuery({
     queryKey: ['regions'],
     queryFn: () => api.regions.list(),
   });
+
+  // Handle both paginated response and array response
+  const regions = Array.isArray(regionsData)
+    ? regionsData
+    : (regionsData as any)?.results || [];
 
   return (
     <div className="min-h-screen pt-20">
