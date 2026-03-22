@@ -38,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Add dynamic attraction pages (gracefully handle API errors)
   try {
     const attractionsResult = await api.attractions.list();
-    const attractionsArray = Array.isArray(attractionsResult) ? attractionsResult : [];
+    const attractionsArray = Array.isArray(attractionsResult) ? attractionsResult : (attractionsResult as any)?.results || [];
     attractionsArray.forEach((attraction) => {
       entries.push({
         url: `${SITE_URL}/attractions/${attraction.slug}`,
@@ -54,7 +54,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Add dynamic region pages (gracefully handle API errors)
   try {
     const regionsResult = await api.regions.list();
-    const regionsArray = Array.isArray(regionsResult) ? regionsResult : [];
+    const regionsArray = Array.isArray(regionsResult) ? regionsResult : (regionsResult as any)?.results || [];
     regionsArray.forEach((region) => {
       entries.push({
         url: `${SITE_URL}/regions/${region.slug}`,
@@ -70,7 +70,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Add dynamic blog pages (gracefully handle API errors)
   try {
     const articlesResult = await api.blog.list();
-    const articlesArray = Array.isArray(articlesResult) ? articlesResult : [];
+    const articlesArray = Array.isArray(articlesResult) ? articlesResult : (articlesResult as any)?.results || [];
     articlesArray.forEach((article) => {
       entries.push({
         url: `${SITE_URL}/blog/${article.slug}`,
