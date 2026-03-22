@@ -31,8 +31,11 @@ export function Navbar() {
     { href: '/', label: 'Home' },
     { href: '/attractions', label: 'Attractions' },
     { href: '/regions', label: 'Regions' },
+    { href: '/search', label: 'Search' },
+    { href: '/weather', label: 'Weather' },
     { href: '/blog', label: 'Blog' },
     { href: '/map', label: 'Map' },
+    { href: '/about', label: 'About' },
     { href: '/contact', label: 'Contact' },
   ];
 

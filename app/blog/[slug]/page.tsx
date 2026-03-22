@@ -70,11 +70,11 @@ export default function BlogDetailPage() {
   return (
     <div className="min-h-screen bg-[#0d1117]">
       {/* Featured Image */}
-      {article.featuredImage && (
+      {article.featured_image && (
         <div className="relative w-full h-[60vh] pt-20">
           <div
             className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${article.featuredImage})` }}
+            style={{ backgroundImage: `url(${article.featured_image})` }}
           >
             <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-[#0d1117]" />
           </div>
@@ -97,7 +97,7 @@ export default function BlogDetailPage() {
             </div>
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
-              <span>{new Date(article.publishedAt).toLocaleDateString()}</span>
+              <span>{new Date(article.published_at).toLocaleDateString()}</span>
             </div>
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4" />

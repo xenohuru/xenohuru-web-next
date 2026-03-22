@@ -81,7 +81,7 @@ export default function RegionDetailPage() {
           </p>
           <div className="mt-6 inline-flex items-center gap-2 px-4 py-2 bg-[#1a7a4a]/20 backdrop-blur-sm border border-[#1a7a4a]/30 rounded-lg">
             <span className="text-[#1a7a4a] font-semibold">
-              {region.attractionCount || attractions?.length || 0} Attractions
+              {region.attraction_count || attractions?.length || 0} Attractions
             </span>
           </div>
         </div>

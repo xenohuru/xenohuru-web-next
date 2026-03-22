@@ -228,7 +228,7 @@ export default function MapPage() {
                     )}
                     <h3 className="font-bold text-sm mb-1">{attraction.name}</h3>
                     <p className="text-xs text-gray-600 mb-2">
-                      {attraction.region}
+                      {typeof attraction.region === 'object' ? attraction.region.name : attraction.region}
                     </p>
                     <span className="inline-block px-2 py-1 bg-[#1a7a4a] text-white text-xs rounded-full mb-3">
                       {attraction.category}

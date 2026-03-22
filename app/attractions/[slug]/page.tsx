@@ -14,13 +14,19 @@ import {
   Calendar, 
   Plane,
   Share2,
-  ChevronDown,
   Star
 } from 'lucide-react';
 import { AttractionCard } from '@/components/AttractionCard';
 import { WeatherWidget } from '@/components/WeatherWidget';
 import { ReviewForm } from '@/components/ReviewForm';
 import { LoadingSkeleton } from '@/components/LoadingSkeleton';
+import { WeatherCard } from '@/components/cards/WeatherCard';
+import { ReviewCard } from '@/components/cards/ReviewCard';
+import { TransportCard } from '@/components/cards/TransportCard';
+import { ReviewsSection } from '@/components/sections/ReviewsSection';
+import { TransportSection } from '@/components/sections/TransportSection';
+import { CitationsSection } from '@/components/sections/CitationsSection';
+import { RelatedContent } from '@/components/sections/RelatedContent';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -47,8 +53,6 @@ const CONSERVATION_STATUS_COLORS = {
 export default function AttractionDetailPage() {
   const params = useParams();
   const slug = params.slug as string;
-  const [tipsOpen, setTipsOpen] = useState(false);
-  const [citationsOpen, setCitationsOpen] = useState(false);
 
   const { data: attraction, isLoading, error, refetch } = useQuery({
     queryKey: ['attraction', slug],
@@ -96,7 +100,7 @@ export default function AttractionDetailPage() {
       try {
         await navigator.share({
           title: attraction.name,
-          text: attraction.shortDescription,
+          text: attraction.short_description,
           url: window.location.href,
         });
       } catch (err) {
@@ -136,7 +140,7 @@ export default function AttractionDetailPage() {
     );
   }
 
-  const images = attraction.images || [attraction.featuredImage];
+  const images = attraction.images || [attraction.featured_image];
 
   return (
     <div className="min-h-screen bg-[#0d1117]">
@@ -179,9 +183,9 @@ export default function AttractionDetailPage() {
                 <span className="px-3 py-1 bg-[#161b22] text-[#8b949e] text-sm rounded-full border border-[#30363d]">
                   {typeof attraction.region === 'object' ? attraction.region.name : attraction.region}
                 </span>
-                {attraction.difficultyLevel && (
-                  <span className={`px-3 py-1 text-sm font-medium rounded-full border ${DIFFICULTY_COLORS[attraction.difficultyLevel as keyof typeof DIFFICULTY_COLORS]}`}>
-                    {attraction.difficultyLevel}
+                {attraction.difficulty_level && (
+                  <span className={`px-3 py-1 text-sm font-medium rounded-full border ${DIFFICULTY_COLORS[attraction.difficulty_level as keyof typeof DIFFICULTY_COLORS]}`}>
+                    {attraction.difficulty_level}
                   </span>
                 )}
               </div>
@@ -236,19 +240,19 @@ export default function AttractionDetailPage() {
 
             {/* Info Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {attraction.estimatedDuration && (
+              {attraction.estimated_duration && (
                 <div className="bg-[#161b22] rounded-lg p-4 border border-[#30363d]">
                   <Clock className="w-5 h-5 text-[#1a7a4a] mb-2" />
                   <div className="text-[#8b949e] text-sm mb-1">Duration</div>
-                  <div className="text-white font-semibold">{attraction.estimatedDuration}</div>
+                  <div className="text-white font-semibold">{attraction.estimated_duration}</div>
                 </div>
               )}
 
-              {attraction.bestTimeToVisit && (
+              {attraction.best_time_to_visit && (
                 <div className="bg-[#161b22] rounded-lg p-4 border border-[#30363d]">
                   <Calendar className="w-5 h-5 text-[#1a7a4a] mb-2" />
                   <div className="text-[#8b949e] text-sm mb-1">Best Time</div>
-                  <div className="text-white font-semibold">{attraction.bestTimeToVisit}</div>
+                  <div className="text-white font-semibold">{attraction.best_time_to_visit}</div>
                 </div>
               )}
 
@@ -256,15 +260,15 @@ export default function AttractionDetailPage() {
                 <DollarSign className="w-5 h-5 text-[#1a7a4a] mb-2" />
                 <div className="text-[#8b949e] text-sm mb-1">Entrance Fee</div>
                 <div className="text-white font-semibold">
-                  {attraction.isFree ? 'Free' : attraction.entranceFee || 'Varies'}
+                  {attraction.is_free ? 'Free' : attraction.entrance_fee || 'Varies'}
                 </div>
               </div>
 
-              {attraction.difficultyLevel && (
+              {attraction.difficulty_level && (
                 <div className="bg-[#161b22] rounded-lg p-4 border border-[#30363d]">
                   <TrendingUp className="w-5 h-5 text-[#1a7a4a] mb-2" />
                   <div className="text-[#8b949e] text-sm mb-1">Difficulty</div>
-                  <div className="text-white font-semibold capitalize">{attraction.difficultyLevel}</div>
+                  <div className="text-white font-semibold capitalize">{attraction.difficulty_level}</div>
                 </div>
               )}
             </div>
@@ -304,24 +308,24 @@ export default function AttractionDetailPage() {
                       {species.image && (
                         <img
                           src={species.image}
-                          alt={species.commonName}
+                          alt={species.common_name}
                           className="w-full h-32 object-cover rounded-lg mb-3"
                         />
                       )}
                       <h3 className="font-semibold text-white mb-1">
-                        {species.commonName}
+                        {species.common_name}
                       </h3>
                       <p className="text-[#8b949e] text-sm italic mb-2">
-                        {species.scientificName}
+                        {species.scientific_name}
                       </p>
                       <span
                         className={`inline-block px-2 py-1 text-xs font-medium rounded ${
                           CONSERVATION_STATUS_COLORS[
-                            species.conservationStatus as keyof typeof CONSERVATION_STATUS_COLORS
+                            species.conservation_status as keyof typeof CONSERVATION_STATUS_COLORS
                           ]
                         }`}
                       >
-                        {species.conservationStatus}
+                        {species.conservation_status}
                       </span>
                     </div>
                   ))}
@@ -329,89 +333,45 @@ export default function AttractionDetailPage() {
               </div>
             )}
 
-            {/* Transport */}
-            {transport && transport.length > 0 && (
+            {/* Transport Section */}
+            <div>
+              <h2 className="font-display text-2xl font-bold text-white mb-4">
+                <Plane className="w-6 h-6 inline mr-2" />
+                Getting There
+              </h2>
+              <TransportSection transport={transport} />
+            </div>
+
+            {/* Tips Section */}
+            {attraction.tips && Array.isArray(attraction.tips) && attraction.tips.length > 0 && (
               <div>
                 <h2 className="font-display text-2xl font-bold text-white mb-4">
-                  Getting There
+                  Tips for Visitors
                 </h2>
-                <div className="bg-[#161b22] rounded-lg border border-[#30363d] overflow-hidden">
-                  <table className="w-full">
-                    <thead className="bg-[#0d1117]">
-                      <tr>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-[#e6edf3]">
-                          <Plane className="w-4 h-4 inline mr-2" />
-                          From
-                        </th>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-[#e6edf3]">
-                          Distance
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#30363d]">
-                      {transport.map((t) => (
-                        <tr key={t.id}>
-                          <td className="px-4 py-3 text-[#e6edf3]">{t.name}</td>
-                          <td className="px-4 py-3 text-[#8b949e]">{t.distanceKm} km</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                <div className="bg-[#161b22] rounded-lg p-6 border border-[#30363d]">
+                  <ul className="space-y-2 text-[#8b949e]">
+                    {attraction.tips.map((tip, idx) => (
+                      <li key={idx} className="flex gap-3">
+                        <span className="text-[#1a7a4a] flex-shrink-0">✓</span>
+                        <span>{tip}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
             )}
 
-            {/* Tips Accordion */}
-            {attraction.tips && (
-              <div>
-                <button
-                  onClick={() => setTipsOpen(!tipsOpen)}
-                  className="w-full flex items-center justify-between bg-[#161b22] rounded-lg p-4 border border-[#30363d] hover:border-[#1a7a4a] transition-colors"
-                >
-                  <h2 className="font-display text-xl font-bold text-white">
-                    Tips for Visitors
-                  </h2>
-                  <ChevronDown
-                    className={`w-5 h-5 text-[#8b949e] transition-transform ${
-                      tipsOpen ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-                {tipsOpen && (
-                  <div className="mt-4 bg-[#161b22] rounded-lg p-6 border border-[#30363d]">
-                    <p className="text-[#8b949e] whitespace-pre-wrap">{attraction.tips}</p>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Citations */}
+            {/* Citations Section */}
             {attraction.citations && (
               <div>
-                <button
-                  onClick={() => setCitationsOpen(!citationsOpen)}
-                  className="w-full flex items-center justify-between bg-[#161b22] rounded-lg p-4 border border-[#30363d] hover:border-[#1a7a4a] transition-colors"
-                >
-                  <h2 className="font-display text-xl font-bold text-white">
-                    Sources & Citations
-                  </h2>
-                  <ChevronDown
-                    className={`w-5 h-5 text-[#8b949e] transition-transform ${
-                      citationsOpen ? 'rotate-180' : ''
-                    }`}
-                  />
-                </button>
-                {citationsOpen && (
-                  <div className="mt-4 bg-[#161b22] rounded-lg p-6 border border-[#30363d]">
-                    <p className="text-[#8b949e] text-sm whitespace-pre-wrap">
-                      {attraction.citations}
-                    </p>
-                  </div>
-                )}
+                <h2 className="font-display text-2xl font-bold text-white mb-4">
+                  Sources & Citations
+                </h2>
+                <CitationsSection citations={attraction.citations} />
               </div>
             )}
 
-            {/* Reviews */}
+            {/* Reviews Section */}
             <div>
               <h2 className="font-display text-2xl font-bold text-white mb-6">
                 Reviews ({reviews?.length || 0})
@@ -422,58 +382,28 @@ export default function AttractionDetailPage() {
 
               {/* Reviews List */}
               {reviews && reviews.length > 0 && (
-                <div className="mt-8 space-y-4">
-                  {reviews.map((review) => (
-                    <div
-                      key={review.id}
-                      className="bg-[#161b22] rounded-lg p-6 border border-[#30363d]"
-                    >
-                      <div className="flex items-start justify-between mb-3">
-                        <div>
-                          <h4 className="font-semibold text-white">{review.name}</h4>
-                          <p className="text-[#8b949e] text-sm">{review.country}</p>
-                        </div>
-                        <div className="flex">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`w-4 h-4 ${
-                                i < review.rating
-                                  ? 'fill-[#e8a045] text-[#e8a045]'
-                                  : 'text-[#30363d]'
-                              }`}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                      <p className="text-[#e6edf3] leading-relaxed">{review.comment}</p>
-                      <p className="text-[#8b949e] text-sm mt-3">
-                        {new Date(review.createdAt).toLocaleDateString()}
-                      </p>
-                    </div>
-                  ))}
+                <div className="mt-8">
+                  <ReviewsSection reviews={reviews} />
                 </div>
               )}
+
+              {!reviews || (reviews.length === 0 && (
+                <div className="mt-8 bg-[#161b22] rounded-lg p-12 border border-[#30363d] text-center">
+                  <Star className="w-12 h-12 text-[#30363d] mx-auto mb-4" />
+                  <p className="text-[#8b949e]">No reviews yet. Be the first to share your experience!</p>
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Right Column - Sidebar */}
           <div className="space-y-6">
-            {/* Weather Widget */}
-            {weather && <WeatherWidget weather={weather} />}
+            {/* Weather Card */}
+            {weather && <WeatherCard weather={weather} />}
 
-            {/* Nearby Attractions */}
+            {/* Related Content / Nearby */}
             {nearby && nearby.length > 0 && (
-              <div className="bg-[#161b22] rounded-2xl p-6 border border-[#30363d]">
-                <h3 className="font-display text-xl font-bold text-white mb-4">
-                  Nearby Attractions
-                </h3>
-                <div className="space-y-4">
-                  {nearby.slice(0, 3).map((attr) => (
-                    <AttractionCard key={attr.id} attraction={attr} compact />
-                  ))}
-                </div>
-              </div>
+              <RelatedContent attractions={nearby} title="Nearby Attractions" />
             )}
           </div>
         </div>
