@@ -36,6 +36,7 @@ export function Navbar() {
     { href: '/blog', label: 'Blog' },
     { href: '/map', label: 'Map' },
     { href: '/about', label: 'About' },
+    { href: '/privacy', label: 'Privacy' },
     { href: '/contact', label: 'Contact' },
   ];
 

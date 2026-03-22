@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+</head>
+<body>
+    <h1>Xenohuru API Test</h1>
+    <button onclick="testAPI()">Test API</button>
+    <div id="result"></div>
+    
+    <script>
+    async function testAPI() {
+        const result = document.getElementById('result');
+        result.innerHTML = '<p>Testing...</p>';
+        
+        try {
+            const response = await fetch('http://192.168.100.1:8000/api/v1/attractions/');
+            
+            result.innerHTML = `
+                <h2>Response Status: ${response.status}</h2>
+                <h3>Headers:</h3>
+                <pre>${JSON.stringify([...response.headers], null, 2)}</pre>
+            `;
+            
+            if (response.ok) {
+                const data = await response.json();
+                result.innerHTML += `<h3>Success! Got ${data.length} attractions</h3>`;
+            } else {
+                result.innerHTML += `<h3>Error: ${response.statusText}</h3>`;
+            }
+        } catch (error) {
+            result.innerHTML = `
+                <h2 style="color: red;">Error!</h2>
+                <p><strong>Type:</strong> ${error.name}</p>
+                <p><strong>Message:</strong> ${error.message}</p>
+                <h3>This is likely a CORS error!</h3>
+                <p>Django needs CORS headers enabled.</p>
+            `;
+            console.error('Full error:', error);
+        }
+    }
+    </script>
+</body>
+</html>

@@ -6,7 +6,7 @@ import { api } from '@/lib/api';
 import { AttractionCard } from '@/components/AttractionCard';
 import { SearchBar } from '@/components/SearchBar';
 import { CardsSkeleton } from '@/components/LoadingSkeleton';
-import { Filter, SlidersHorizontal } from 'lucide-react';
+import { Filter, SlidersHorizontal, AlertCircle, RefreshCw } from 'lucide-react';
 import type { AttractionFilters } from '@/lib/types';
 
 export default function AttractionsPage() {
@@ -155,10 +155,21 @@ export default function AttractionsPage() {
 
         {/* Error State */}
         {error && (
-          <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-6 text-center">
-            <p className="text-red-400">
-              Failed to load attractions. Please try again later.
+          <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-8 text-center mb-6">
+            <div className="flex justify-center mb-4">
+              <AlertCircle className="w-8 h-8 text-red-500" />
+            </div>
+            <h3 className="font-bold text-white mb-2">Failed to Load Attractions</h3>
+            <p className="text-red-400 text-sm mb-4">
+              {error instanceof Error ? error.message : 'Unable to fetch attractions. Please check your connection and try again.'}
             </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/20 border border-red-500/30 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors font-medium text-sm"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Try Again
+            </button>
           </div>
         )}
 

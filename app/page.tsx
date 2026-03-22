@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import { AttractionCard } from '@/components/AttractionCard';
-import { Compass, ArrowRight, ChevronsDown, Building2, Plane, Mountain, MapPin } from 'lucide-react';
+import { WeatherForecastCard } from '@/components/cards/WeatherForecastCard';
+import { Compass, ArrowRight, ChevronsDown, Building2, Plane, Mountain, MapPin, Cloud } from 'lucide-react';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css';
 
@@ -73,6 +74,17 @@ export default function HomePage() {
   const { data: stats } = useQuery({
     queryKey: ['stats'],
     queryFn: () => api.stats.get(),
+  });
+
+  const { data: partners } = useQuery({
+    queryKey: ['partners'],
+    queryFn: () => api.partners.list(),
+  });
+
+  // Dar es Salaam coordinates for weather forecast
+  const { data: weatherForecast } = useQuery({
+    queryKey: ['weather-forecast'],
+    queryFn: () => api.weather.forecast(-6.8, 39.3) as Promise<any[]>,
   });
 
   // Rotate hero quote
@@ -303,6 +315,102 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* WEATHER FORECAST SECTION */}
+      {weatherForecast && weatherForecast.length > 0 && (
+        <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+          <div className="text-center mb-12" data-aos="fade-down">
+            <p className="font-mono text-xs tracking-widest text-[#1a7a4a] uppercase mb-3 flex items-center justify-center gap-2">
+              <Cloud className="w-4 h-4" />
+              Weather & Climate
+            </p>
+            <h2 className="font-display text-4xl sm:text-5xl font-bold text-white mb-3">
+              5-Day Forecast
+            </h2>
+            <p className="text-[#6b7280] text-lg max-w-xl mx-auto">
+              Plan your adventure with our weather outlook for Tanzania's major regions
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            {weatherForecast.slice(0, 5).map((forecast, idx) => (
+              <div key={idx} data-aos="fade-up" data-aos-delay={idx * 50}>
+                <WeatherForecastCard forecast={forecast} minimal />
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-8">
+            <a
+              href="/weather"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#1a7a4a]/20 border border-[#1a7a4a]/30 text-[#1a7a4a] rounded-lg hover:bg-[#1a7a4a]/30 transition-colors font-medium"
+            >
+              View Full Weather
+              <ArrowRight className="w-4 h-4" />
+            </a>
+          </div>
+        </section>
+      )}
+
+      {/* PARTNERS SECTION */}
+      {partners && partners.length > 0 && (
+        <section className="py-20 bg-[#161b22]/50 border-t border-b border-[#30363d]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="font-display text-4xl md:text-5xl font-bold text-white mb-4">
+                Our Partners
+              </h2>
+              <p className="text-lg text-[#8b949e] max-w-2xl mx-auto">
+                Collaborating with leading tourism boards, conservation organizations, and technology partners
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {partners.slice(0, 8).map((partner) => (
+                <a
+                  key={partner.id}
+                  href={partner.website || `/partners`}
+                  target={partner.website ? "_blank" : undefined}
+                  rel={partner.website ? "noopener noreferrer" : undefined}
+                  className="group bg-[#161b22] rounded-lg p-6 border border-[#30363d] hover:border-[#1a7a4a]/50 transition-all duration-300 hover:shadow-lg hover:shadow-[#1a7a4a]/10"
+                  data-aos="zoom-in"
+                >
+                  {partner.logo && (
+                    <div className="h-24 flex items-center justify-center mb-4 bg-white/5 rounded-lg overflow-hidden group-hover:bg-white/10 transition-colors">
+                      <img
+                        src={partner.logo}
+                        alt={partner.name}
+                        className="h-16 object-contain group-hover:scale-110 transition-transform"
+                      />
+                    </div>
+                  )}
+                  <h3 className="font-semibold text-white mb-2 group-hover:text-[#1a7a4a] transition-colors">
+                    {partner.name}
+                  </h3>
+                  <p className="text-sm text-[#8b949e] line-clamp-2 mb-3">
+                    {partner.description}
+                  </p>
+                  <span className="inline-block px-3 py-1 bg-[#1a7a4a]/10 text-[#1a7a4a] text-xs rounded-full border border-[#1a7a4a]/20">
+                    {partner.partner_type || 'Partner'}
+                  </span>
+                </a>
+              ))}
+            </div>
+
+            {partners.length > 8 && (
+              <div className="text-center mt-12">
+                <a
+                  href="/partners"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-[#1a7a4a]/20 border border-[#1a7a4a]/30 text-[#1a7a4a] rounded-lg hover:bg-[#1a7a4a]/30 transition-colors font-medium"
+                >
+                  View All Partners
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* CTA SECTION */}
       <section className="py-20 bg-gradient-to-br from-[#1a4731] to-[#0a0a0a]">
