@@ -1,3 +1,30 @@
+## [2026-03-22 21:30] - Enhanced Homepage & Navigation
+
+### Commits:
+- `e398744` - Enhance homepage & navbar with comprehensive sections
+
+### Features:
+**Enhanced Navbar:**
+- Replaced placeholder logo with legacy Xenohuru SVG logo
+- Removed "Open Source" badge for cleaner design
+- Active page highlighting with green background/underline
+- Maintained live EAT clock, search, language toggle, GitHub stars
+
+**Homepage Enhancements:**
+- **Regions Preview Section**: 3 featured regions with hero images
+- **Blog Preview Section**: 3 latest articles with featured images
+- **Tour Operators Preview**: 4 verified operators with logos
+- **FAQ Section**: 4 common travel questions (visa, timing, safety, currency)
+- **Sponsor CTA**: Call to support infrastructure (API, database, storage, domain)
+- **Contact CTA**: Help planning trips section
+- All sections responsive with AOS fade-in animations
+
+### Bug Fixes:
+- Fixed sitemap TypeScript errors with explicit `any[]` types
+- Fixed region coordinates display in detail pages
+
+---
+
 ## [2026-03-22 20:52] - Fix Region Coordinates & Create Enhanced UI Components
 
 ### Commits:
