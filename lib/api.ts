@@ -24,11 +24,12 @@ import type {
   BlogFilters,
 } from './types';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://xenohuru.cleven.is-a.dev';
+// Hardcoded API URL for production deployment
+const API_BASE = 'https://xenohuru.cleven.is-a.dev';
 
 console.log('🔗 API Configuration:', {
   base: API_BASE,
-  env: process.env.NEXT_PUBLIC_API_URL,
+  production: true,
 });
 
 // Generic fetch wrapper with error handling
