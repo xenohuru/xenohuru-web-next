@@ -24,8 +24,8 @@ import type {
   BlogFilters,
 } from './types';
 
-// Hardcoded API URL for production deployment
-const API_BASE = 'https://xenohuru.cleven.is-a.dev';
+// Hardcoded API URL - use IP address since domain API not responding
+const API_BASE = 'http://159.65.119.182:8000';
 
 console.log('🔗 API Configuration:', {
   base: API_BASE,
