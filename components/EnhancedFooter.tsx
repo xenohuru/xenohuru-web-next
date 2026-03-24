@@ -149,7 +149,7 @@ export function EnhancedFooter() {
               </li>
               <li>
                 <a
-                  href="http://127.0.0.1:8000/api/schema/swagger/"
+                  href="https://xenohuru.cleven.is-a.dev/api/schema/swagger/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[#8b949e] hover:text-[#e8a045] transition-colors text-sm"
@@ -226,7 +226,7 @@ export function EnhancedFooter() {
               </Link>
               <span>·</span>
               <a
-                href="http://127.0.0.1:8000/api/schema/swagger/"
+                href="https://xenohuru.cleven.is-a.dev/api/schema/swagger/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-[#e8a045] transition-colors"
