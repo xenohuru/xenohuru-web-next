@@ -1,3 +1,21 @@
+## [2026-03-24 16:33] - Hardcode API URL for Production
+
+### Commits:
+- `1db85af` - Hardcoded API URL for Vercel deployment
+
+### Changes:
+- **API Configuration**: Hardcoded `API_BASE` to `https://xenohuru.cleven.is-a.dev`
+- **Image Optimization**: Updated Next.js config to allow images from new API domain
+- **Vercel Config**: Simplified vercel.json (removed env variables)
+- **Deployment Fix**: Resolved API data fetching issues on Vercel production
+
+**Working Configuration:**
+- Production API: `https://xenohuru.cleven.is-a.dev`
+- No environment variables needed
+- API connectivity verified in local build
+
+---
+
 ## [2026-03-23 17:58] - Security Fix: CVE-2025-66478
 
 ### Commits:
