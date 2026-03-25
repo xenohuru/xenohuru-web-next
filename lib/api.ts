@@ -24,12 +24,12 @@ import type {
   BlogFilters,
 } from './types';
 
-// Hardcoded API URL - use IP address since domain API not responding
-const API_BASE = 'http://127.0.0.1:8000';
+// Hardcoded API URL for production
+const API_BASE = 'http://159.65.119.182:8000';
 
 console.log('🔗 API Configuration:', {
   base: API_BASE,
-  production: false,
+  production: true,
 });
 
 // Generic fetch wrapper with error handling
