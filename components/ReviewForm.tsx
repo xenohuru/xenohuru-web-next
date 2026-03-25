@@ -13,11 +13,12 @@ interface ReviewFormProps {
 
 export function ReviewForm({ attractionSlug, onSuccess }: ReviewFormProps) {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    country: '',
+    reviewer_name: '',
+    reviewer_email: '',
+    reviewer_country: '',
     rating: 0,
-    comment: '',
+    title: '',
+    body: '',
   });
 
   const submitReview = useMutation({
@@ -25,7 +26,7 @@ export function ReviewForm({ attractionSlug, onSuccess }: ReviewFormProps) {
       api.attractions.submitReview(attractionSlug, data),
     onSuccess: () => {
       toast.success('Review submitted successfully!');
-      setFormData({ name: '', email: '', country: '', rating: 0, comment: '' });
+      setFormData({ reviewer_name: '', reviewer_email: '', reviewer_country: '', rating: 0, title: '', body: '' });
       onSuccess?.();
     },
     onError: () => {
@@ -36,7 +37,7 @@ export function ReviewForm({ attractionSlug, onSuccess }: ReviewFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.email || !formData.country || formData.rating === 0 || !formData.comment) {
+    if (!formData.reviewer_name || !formData.reviewer_email || !formData.reviewer_country || formData.rating === 0 || !formData.title || !formData.body) {
       toast.error('Please fill in all fields');
       return;
     }
@@ -59,8 +60,8 @@ export function ReviewForm({ attractionSlug, onSuccess }: ReviewFormProps) {
           <input
             type="text"
             id="name"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            value={formData.reviewer_name}
+            onChange={(e) => setFormData({ ...formData, reviewer_name: e.target.value })}
             className="w-full px-4 py-3 bg-[#0d1117] border border-[#30363d] rounded-lg text-white focus:outline-none focus:border-[#1a7a4a] transition-colors"
             required
           />
@@ -74,8 +75,8 @@ export function ReviewForm({ attractionSlug, onSuccess }: ReviewFormProps) {
           <input
             type="email"
             id="email"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            value={formData.reviewer_email}
+            onChange={(e) => setFormData({ ...formData, reviewer_email: e.target.value })}
             className="w-full px-4 py-3 bg-[#0d1117] border border-[#30363d] rounded-lg text-white focus:outline-none focus:border-[#1a7a4a] transition-colors"
             required
           />
@@ -89,8 +90,8 @@ export function ReviewForm({ attractionSlug, onSuccess }: ReviewFormProps) {
           <input
             type="text"
             id="country"
-            value={formData.country}
-            onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+            value={formData.reviewer_country}
+            onChange={(e) => setFormData({ ...formData, reviewer_country: e.target.value })}
             className="w-full px-4 py-3 bg-[#0d1117] border border-[#30363d] rounded-lg text-white focus:outline-none focus:border-[#1a7a4a] transition-colors"
             required
           />
@@ -109,6 +110,22 @@ export function ReviewForm({ attractionSlug, onSuccess }: ReviewFormProps) {
           />
         </div>
 
+        {/* Title */}
+        <div>
+          <label htmlFor="title" className="block text-sm font-medium text-[#e6edf3] mb-2">
+            Review Title *
+          </label>
+          <input
+            type="text"
+            id="title"
+            value={formData.title}
+            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            className="w-full px-4 py-3 bg-[#0d1117] border border-[#30363d] rounded-lg text-white focus:outline-none focus:border-[#1a7a4a] transition-colors"
+            placeholder="Summarize your experience..."
+            required
+          />
+        </div>
+
         {/* Comment */}
         <div>
           <label htmlFor="comment" className="block text-sm font-medium text-[#e6edf3] mb-2">
@@ -117,8 +134,8 @@ export function ReviewForm({ attractionSlug, onSuccess }: ReviewFormProps) {
           <textarea
             id="comment"
             rows={5}
-            value={formData.comment}
-            onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
+            value={formData.body}
+            onChange={(e) => setFormData({ ...formData, body: e.target.value })}
             className="w-full px-4 py-3 bg-[#0d1117] border border-[#30363d] rounded-lg text-white focus:outline-none focus:border-[#1a7a4a] transition-colors resize-none"
             placeholder="Share your experience..."
             required

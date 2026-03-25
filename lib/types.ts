@@ -88,11 +88,12 @@ export interface Review {
 }
 
 export interface ReviewSubmission {
-  name: string;
-  email: string;
-  country: string;
+  reviewer_name: string;
+  reviewer_email: string;
+  reviewer_country: string;
   rating: number;
-  comment: string;
+  title: string;
+  body: string;
 }
 
 export interface Weather {
