@@ -24,8 +24,8 @@ import type {
   BlogFilters,
 } from './types';
 
-// Hardcoded API URL for production
-const API_BASE = 'http://159.65.119.182:8000';
+// Hardcoded API URL for production - Use HTTPS domain for Vercel compatibility
+const API_BASE = 'https://xenohuru.cleven.is-a.dev';
 
 console.log('🔗 API Configuration:', {
   base: API_BASE,

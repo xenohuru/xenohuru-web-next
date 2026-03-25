@@ -4,9 +4,8 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'http',
-        hostname: '192.168.100.1',
-        port: '8000',
+        protocol: 'https',
+        hostname: 'xenohuru.cleven.is-a.dev',
         pathname: '/**',
       },
       {
