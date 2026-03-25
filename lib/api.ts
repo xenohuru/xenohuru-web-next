@@ -25,11 +25,11 @@ import type {
 } from './types';
 
 // Hardcoded API URL - use IP address since domain API not responding
-const API_BASE = 'http://159.65.119.182:8000';
+const API_BASE = 'http://127.0.0.1:8000';
 
 console.log('🔗 API Configuration:', {
   base: API_BASE,
-  production: true,
+  production: false,
 });
 
 // Generic fetch wrapper with error handling
@@ -352,12 +352,21 @@ export const statsAPI = {
       contributorsAPI.list(),
     ]);
 
+    // Handle paginated responses
+    const getCount = (result: any) => {
+      if (result.status !== 'fulfilled') return 0;
+      const data = result.value;
+      // If paginated, use count property, otherwise use array length
+      if (data && typeof data === 'object' && 'count' in data) {
+        return data.count;
+      }
+      return Array.isArray(data) ? data.length : 0;
+    };
+
     return {
-      attractionCount:
-        attractions.status === 'fulfilled' ? attractions.value.length : 0,
-      regionCount: regions.status === 'fulfilled' ? regions.value.length : 0,
-      contributorCount:
-        contributors.status === 'fulfilled' ? contributors.value.length : 0,
+      attractionCount: getCount(attractions),
+      regionCount: getCount(regions),
+      contributorCount: getCount(contributors),
     };
   },
 };
