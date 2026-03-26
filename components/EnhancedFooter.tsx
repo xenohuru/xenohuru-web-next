@@ -149,7 +149,7 @@ export function EnhancedFooter() {
               </li>
               <li>
                 <a
-                  href="http://127.0.0.1:8000/api/schema/swagger/"
+                  href="https://xenohuru.cleven.is-a.dev/api/schema/swagger/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[#8b949e] hover:text-[#e8a045] transition-colors text-sm"
@@ -173,14 +173,14 @@ export function EnhancedFooter() {
             <h3 className="text-white font-semibold mb-4">Open Source</h3>
             <ul className="space-y-2">
               {[
-                { href: '/about', label: 'About' },
-                { href: '/sponsor', label: 'Sponsor' },
-                { href: 'https://github.com/xenohuru/xenohuru-web-nextjs/blob/main/LICENSE', label: 'License (MIT)', external: true },
-                { href: '/changelog', label: 'Changelog' },
-                { href: '/privacy', label: 'Terms of Use' },
-                { href: '/privacy', label: 'Privacy Policy' },
+                { href: '/about', label: 'About', id: 'about' },
+                { href: '/sponsor', label: 'Sponsor', id: 'sponsor' },
+                { href: 'https://github.com/xenohuru/xenohuru-web-nextjs/blob/main/LICENSE', label: 'License (MIT)', external: true, id: 'license' },
+                { href: '/changelog', label: 'Changelog', id: 'changelog' },
+                { href: '/privacy', label: 'Terms of Use', id: 'terms' },
+                { href: '/privacy', label: 'Privacy Policy', id: 'privacy' },
               ].map((link) => (
-                <li key={link.href}>
+                <li key={link.id}>
                   {link.external ? (
                     <a
                       href={link.href}
@@ -226,7 +226,7 @@ export function EnhancedFooter() {
               </Link>
               <span>·</span>
               <a
-                href="http://127.0.0.1:8000/api/schema/swagger/"
+                href="https://xenohuru.cleven.is-a.dev/api/schema/swagger/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-[#e8a045] transition-colors"

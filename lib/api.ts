@@ -24,11 +24,12 @@ import type {
   BlogFilters,
 } from './types';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://xenohuru.cleven.is-a.dev';
+// Hardcoded API URL for production - Use HTTPS domain for Vercel compatibility
+const API_BASE = 'https://xenohuru.cleven.is-a.dev';
 
 console.log('🔗 API Configuration:', {
   base: API_BASE,
-  env: process.env.NEXT_PUBLIC_API_URL,
+  production: true,
 });
 
 // Generic fetch wrapper with error handling
@@ -351,12 +352,21 @@ export const statsAPI = {
       contributorsAPI.list(),
     ]);
 
+    // Handle paginated responses
+    const getCount = (result: any) => {
+      if (result.status !== 'fulfilled') return 0;
+      const data = result.value;
+      // If paginated, use count property, otherwise use array length
+      if (data && typeof data === 'object' && 'count' in data) {
+        return data.count;
+      }
+      return Array.isArray(data) ? data.length : 0;
+    };
+
     return {
-      attractionCount:
-        attractions.status === 'fulfilled' ? attractions.value.length : 0,
-      regionCount: regions.status === 'fulfilled' ? regions.value.length : 0,
-      contributorCount:
-        contributors.status === 'fulfilled' ? contributors.value.length : 0,
+      attractionCount: getCount(attractions),
+      regionCount: getCount(regions),
+      contributorCount: getCount(contributors),
     };
   },
 };
@@ -375,3 +385,4 @@ export const api = {
 };
 
 export default api;
+// Force rebuild

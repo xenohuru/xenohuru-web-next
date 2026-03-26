@@ -1,3 +1,39 @@
+## [2026-03-24 16:33] - Hardcode API URL for Production
+
+### Commits:
+- `1db85af` - Hardcoded API URL for Vercel deployment
+
+### Changes:
+- **API Configuration**: Hardcoded `API_BASE` to `https://xenohuru.cleven.is-a.dev`
+- **Image Optimization**: Updated Next.js config to allow images from new API domain
+- **Vercel Config**: Simplified vercel.json (removed env variables)
+- **Deployment Fix**: Resolved API data fetching issues on Vercel production
+
+**Working Configuration:**
+- Production API: `https://xenohuru.cleven.is-a.dev`
+- No environment variables needed
+- API connectivity verified in local build
+
+---
+
+## [2026-03-23 17:58] - Security Fix: CVE-2025-66478
+
+### Commits:
+- `2e9690a` - Fix CVE-2025-66478: Update Next.js to 15.2.6
+
+### Security:
+- **CRITICAL FIX**: Updated Next.js from 15.2.4 to 15.2.6
+- Patched Remote Code Execution (RCE) vulnerability (CVSS 10.0)
+- CVE-2025-66478 affects React Server Components protocol
+- No configuration workaround available - upgrade required
+- Vercel deployment now uses patched version
+
+**Post-Deployment Action Required:**
+- Rotate all application secrets (API keys, database passwords)
+- Monitor for any suspicious activity during vulnerable period
+
+---
+
 ## [2026-03-22 21:30] - Enhanced Homepage & Navigation
 
 ### Commits:
